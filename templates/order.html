@@ -41,6 +41,7 @@
     </label><br>
     <button type="submit">Get ETA</button>
   </form>
+  <p></p>
   <div id="result"></div>
   <script>
     document.getElementById('orderForm').onsubmit = async e => {
@@ -48,8 +49,15 @@
       const data = Object.fromEntries(new FormData(e.target).entries());
       for (let k in data) data[k] = isNaN(data[k]) ? data[k] : parseFloat(data[k]);
       const resp = await fetch('/predict', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)});
-      const {eta_min} = await resp.json();
+      const {eta_min, explanation} = await resp.json();
       document.getElementById('result').innerText = `Estimated delivery time: ${eta_min} minutes`;
+
+      const explain = document.createElement('p');
+      explain.innerHTML = `
+        <strong>Why is my order taking this long?</strong>
+        <p></p>
+        ${explanation}`;
+      document.getElementById('result').appendChild(explain);
     };
   </script>
 </body>
