@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Food Delivery Simulator</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+  <h1>Select a Restaurant</h1>
+  <div id="map" style="height: 500px;"></div>
+  <script>
+    const restaurants = {{ restaurants|tojson }};
+    const user = {{ user|tojson }};
+  </script>
+  <script src="/static/map.js"></script>
+</body>
+</html>

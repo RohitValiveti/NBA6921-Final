@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Order from {{ restaurant.name }}</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <h1>Order at {{ restaurant.name }}</h1>
+  <form id="orderForm">
+    <label>Distance (km): <input type="number" step="0.1" name="distance_km" value="{{ restaurant.distance_km }}" readonly></label><br>
+    <label>Preparation Time (min): <input type="number" name="Preparation_Time_min" value="{{ restaurant.Preparation_Time_min }}" readonly></label><br>
+    <label>Weather:
+      <select name="Weather">
+        <option>Clear</option><option>Foggy</option><option>Rainy</option><option>Snowy</option><option>Windy</option>
+      </select>
+    </label><br>
+    <label>Traffic Level:
+      <select name="Traffic_Level">
+        <option>Low</option><option>Medium</option><option>High</option>
+      </select>
+    </label><br>
+    <label>Time of Day:
+      <select name="Time_of_Day">
+        {% for t in times %}
+        <option>{{ t }}</option>
+        {% endfor %}
+      </select>
+    </label><br>
+    <label>Vehicle Type:
+      <select name="Vehicle_Type">
+        <option>Bike</option><option>Scooter</option><option>Car</option>
+      </select>
+    </label><br>
+    <label>Courier:
+      <select name="Courier_Experience_yrs">
+        {% for d in drivers %}
+        <option value="{{ d.Courier_Experience_yrs }}">{{ d.name }} ({{ d.Courier_Experience_yrs }} yrs)</option>
+        {% endfor %}
+      </select>
+    </label><br>
+    <button type="submit">Get ETA</button>
+  </form>
+  <div id="result"></div>
+  <script>
+    document.getElementById('orderForm').onsubmit = async e => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target).entries());
+      for (let k in data) data[k] = isNaN(data[k]) ? data[k] : parseFloat(data[k]);
+      const resp = await fetch('/predict', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)});
+      const {eta_min} = await resp.json();
+      document.getElementById('result').innerText = `Estimated delivery time: ${eta_min} minutes`;
+    };
+  </script>
+</body>
+</html>
