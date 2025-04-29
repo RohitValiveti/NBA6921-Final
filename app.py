@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify
-from model import predict_delivery_time, train_model
+from model import predict_delivery_time, train_model, chatbot_message
 
 app = Flask(__name__)
 
@@ -54,10 +54,14 @@ def predict():
         }
 
         prediction = predict_delivery_time(feature_data)
-        
-        return jsonify({"eta_min": round(prediction, 1)})
+        chatbot_response = chatbot_message(feature_data)
+        # print(chatbot_response)
+
+        return jsonify({"eta_min": round(prediction, 1),
+                        "explanation": chatbot_response})
     
     except Exception as e:
+        print("Exception occurred:", str(e))
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':

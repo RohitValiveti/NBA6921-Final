@@ -10,6 +10,10 @@ from sklearn.ensemble import RandomForestRegressor
 import matplotlib.pyplot as plt
 import seaborn as sns
 import joblib
+import openai
+from openai import OpenAI
+
+API_KEY = ""
 
 def train_model():
     ## CHANGE THIS IF YOU WANT
@@ -61,4 +65,30 @@ def predict_delivery_time(data):
     
     # Make predictions
     prediction = model.predict([feature_vector])
-    return prediction[0]
+    
+    return (prediction[0])
+
+def chatbot_message(feature_data):
+    client = OpenAI(api_key=API_KEY)
+    openai.api_key = API_KEY
+    feature_data_read = "\n".join(f"{k}: {v}" for k, v in feature_data.items())
+
+    PROMPT_TEMPLATE = f"""
+      You are a friendly customer support assistant working for a courier service (e.g., UberEats)
+      Given these inputs: 
+      {feature_data_read}
+      Write a concise and plausible explanation in a professional tone for why the customer's delivery is late.
+      Do not include any sign-off ("Best regards"), just the explanation.
+    """
+
+    # print(feature_data_read)
+    prompt = PROMPT_TEMPLATE.format(input=feature_data_read)  
+    # print(prompt)
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+          {"role": "system", "content": prompt}
+        ]
+    )
+    message = response.choices[0].message.content
+    return message
