@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify
-from model import predict_delivery_time
+from model import predict_delivery_time, train_model
 
 app = Flask(__name__)
 
@@ -19,6 +19,9 @@ drivers = [
     {"id":3, "name":"Cara",  "Courier_Experience_yrs":1},
 ]
 
+# Train the model once at startup
+train_model()
+
 @app.route('/')
 def index():
     # pass restaurants and a dummy user location
@@ -33,10 +36,27 @@ def order(rest_id):
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    data = request.json
-    # data contains weather, traffic, time_of_day, vehicle, plus preset distance & prep & driver_exp
-    prediction = predict_delivery_time(data)
-    return jsonify({"eta_min": prediction})
+    try:
+        data = request.json
+        
+        # create feature dictionary
+        feature_data = {
+            'distance_km': data.get('distance_km', 0),
+            'Preparation_Time_min': data.get('Preparation_Time_min', 0),
+            'Weather': data.get('Weather', ''),
+            'Traffic_Level': data.get('Traffic_Level', ''),
+            'Time_of_Day': data.get('Time_of_Day', ''),
+            'Vehicle_Type': data.get('Vehicle_Type', ''),
+            'Courier_Experience_yrs': data.get('Courier_Experience_yrs', 0)
+            
+        }
+
+        prediction = predict_delivery_time(feature_data)
+        
+        return jsonify({"eta_min": round(prediction, 1)})
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
