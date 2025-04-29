@@ -5,13 +5,13 @@ app = Flask(__name__)
 
 # Example restaurant data with preset distances (km) and preparation times (min)
 restaurants = [
-    {"id": 1, "name": "Taste of Thai",   "lat": 42.437810, "lng": -76.507968, "distance_km": 3.2, "Preparation_Time_min": 12},
-    {"id": 2, "name": "Collegetown Bagels",   "lat": 42.4421999, "lng": -76.4855129, "distance_km": 2.5, "Preparation_Time_min": 15},
-    {"id": 3, "name": "Pho Time",      "lat": 42.441837, "lng": -76.484625, "distance_km": 4.1, "Preparation_Time_min": 10},
-    {"id": 4, "name": "New Delhi Diamond's",     "lat": 42.438730,    "lng": -76.499380,     "distance_km": 1.8, "Preparation_Time_min": 8},
-    {"id": 5, "name": "Thompson and Bleecker",   "lat": 42.440285,    "lng": -76.496161,     "distance_km": 3.7, "Preparation_Time_min": 14},
-    {"id": 6, "name": "Texas Roadhouse",   "lat": 42.4307828,    "lng": -76.5075881,     "distance_km": 3.7, "Preparation_Time_min": 20},
-    {"id": 7, "name": "McDonald's",   "lat": 42.4219755,    "lng": -76.5177047,     "distance_km": 3.7, "Preparation_Time_min": 5},
+    {"id": 1, "name": "Taste of Thai",   "lat": 42.437810, "lng": -76.507968, "distance_km": 2.7, "Preparation_Time_min": 15},
+    {"id": 2, "name": "Collegetown Bagels",   "lat": 42.4421999, "lng": -76.4855129, "distance_km": 0.2, "Preparation_Time_min": 10},
+    {"id": 3, "name": "Pho Time",      "lat": 42.441837, "lng": -76.484625, "distance_km": 0.1, "Preparation_Time_min": 13},
+    {"id": 4, "name": "New Delhi Diamond's",     "lat": 42.438730,    "lng": -76.499380,     "distance_km": 1.8, "Preparation_Time_min": 17},
+    {"id": 5, "name": "Thompson and Bleecker",   "lat": 42.440285,    "lng": -76.496161,     "distance_km": 1.12, "Preparation_Time_min": 23},
+    {"id": 6, "name": "Texas Roadhouse",   "lat": 42.4307828,    "lng": -76.5075881,     "distance_km": 3.52, "Preparation_Time_min": 22},
+    {"id": 7, "name": "McDonald's",   "lat": 42.4219755,    "lng": -76.5177047,     "distance_km": 4.16, "Preparation_Time_min": 3},
 
 ]
 
@@ -27,7 +27,7 @@ train_model()
 
 @app.route('/')
 def index():
-    user_loc = {"lat": 42.4219755, "lng": -76.5177047}
+    user_loc = {"lat": 42.441409, "lng": -76.484592}
     return render_template('index.html', restaurants=restaurants, user=user_loc)
 
 @app.route('/order/<int:rest_id>')
