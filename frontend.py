@@ -59,7 +59,7 @@ sel = st.sidebar.selectbox("Choose restaurant:", names, index=idx())
 sel_id = df[df['name']==sel]['id'].values[0]
 if sel_id != st.session_state.selected_id:
     st.session_state.selected_id = sel_id
-    st.experimental_rerun()
+    st.rerun()
 # Show selected
 selected = df[df['id']==st.session_state.selected_id].iloc[0]
 st.sidebar.markdown(f"**Selected:** {selected['name']}")
