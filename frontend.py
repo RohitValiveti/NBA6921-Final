@@ -69,9 +69,9 @@ st.sidebar.markdown(f"- Preparation time: **{selected['Preparation_Time_min']} m
 
 # ETA Prediction UI
 st.sidebar.header("ETA Prediction")
-weather = st.sidebar.selectbox("Weather", ["Clear", "Rainy"])
+weather = st.sidebar.selectbox("Weather", ["Clear", "Rainy", "Snowy", "Windy", "Foggy"])
 traffic = st.sidebar.selectbox("Traffic Level", ["Low", "Medium", "High"])
-time = st.sidebar.selectbox("Time of Day", ["Morning", "Afternoon", "Evening"])
+time = st.sidebar.selectbox("Time of Day", ["Morning", "Afternoon", "Evening", "Night"])
 vehicle = st.sidebar.selectbox("Vehicle Type", ["Car", "Bike", "Scooter"])
 exp = st.sidebar.slider("Courier Experience", 0, 10, 1)
 if st.sidebar.button("Predict ETA"):

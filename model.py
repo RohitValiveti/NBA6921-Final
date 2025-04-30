@@ -33,8 +33,8 @@ def train_model():
     dataset_train = pd.get_dummies(dataset_train, columns=columns_to_encode)
     dataset_test = pd.get_dummies(dataset_test, columns=columns_to_encode)
 
-    features = ["Distance_km", "Weather_Clear", "Weather_Rainy", "Traffic_Level_Low", "Traffic_Level_Medium", "Traffic_Level_High",
-            "Time_of_Day_Morning", "Time_of_Day_Afternoon", "Time_of_Day_Evening", "Vehicle_Type_Car"]
+    features = ["Distance_km", "Preparation_Time_min", "Courier_Experience_yrs", "Weather_Clear", "Weather_Rainy", "Weather_Foggy", "Weather_Snowy", "Weather_Windy", "Traffic_Level_Low", "Traffic_Level_Medium", "Traffic_Level_High",
+            "Time_of_Day_Morning", "Time_of_Day_Afternoon", "Time_of_Day_Evening", "Time_of_Day_Night", "Vehicle_Type_Car", "Vehicle_Type_Bike", "Vehicle_Type_Scooter"]
     Xtrain = dataset_train[features]
     # Xtest = dataset_test[features]
 
@@ -52,15 +52,23 @@ def predict_delivery_time(data):
     
     feature_vector = [
         data.get('distance_km', 0),  # Distance_km
+        data.get('Preparation_Time_min', 0),  # Preparation_Time_min
+        data.get('Courier_Experience_yrs', 0),  # Courier_Experience_yrs
         1 if data.get('Weather', '') == 'Clear' else 0,  # Weather_Clear
         1 if data.get('Weather', '') == 'Rainy' else 0,  # Weather_Rainy
+        1 if data.get('Weather', '') == 'Foggy' else 0,  # Weather_Snowy
+        1 if data.get('Weather', '') == 'Snowy' else 0,  # Weather_Foggy
+        1 if data.get('Weather', '') == 'Windy' else 0,  # Weather_Windy
         1 if data.get('Traffic_Level', '') == 'Low' else 0,    # Traffic_Level_Low
         1 if data.get('Traffic_Level', '') == 'Medium' else 0,  # Traffic_Level_Medium
         1 if data.get('Traffic_Level', '') == 'High' else 0,    # Traffic_Level_High
         1 if data.get('Time_of_Day', '') == 'Morning' else 0,   # Time_of_Day_Morning
         1 if data.get('Time_of_Day', '') == 'Afternoon' else 0, # Time_of_Day_Afternoon
         1 if data.get('Time_of_Day', '') == 'Evening' else 0,   # Time_of_Day_Evening
-        1 if data.get('Vehicle_Type', '') == 'Car' else 0      # Vehicle_Type_Car
+        1 if data.get('Time_of_Day', '') == 'Night' else 0,     # Time_of_Day_Night
+        1 if data.get('Vehicle_Type', '') == 'Car' else 0,      # Vehicle_Type_Car
+        1 if data.get('Vehicle_Type', '') == 'Bike' else 0,   # Vehicle_Type_Bike
+        1 if data.get('Vehicle_Type', '') == 'Scooter' else 0   # Vehicle_Type_Scooter
     ]
     
     # Make predictions
