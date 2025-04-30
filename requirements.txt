@@ -8,3 +8,6 @@ seaborn
 joblib
 openpyxl
 openai
+streamlit
+folium 
+streamlit-folium
