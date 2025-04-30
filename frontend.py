@@ -18,7 +18,7 @@ df = pd.DataFrame([
 # User location
 user_loc = {'lat': 42.441409, 'lon': -76.484592}
 
-st.title("🍔 Delivery Map & Insights App")
+st.title("Food Delivery Prediction 🍔")
 
 # Initialize session state
 if 'selected_id' not in st.session_state:
@@ -86,29 +86,25 @@ if st.sidebar.button("Predict ETA"):
 
 # Delivery Insights Chatbot
 st.sidebar.header("Delivery Insights Chatbot")
-# Button to request delay explanation
-if st.sidebar.button("Why is my order delayed?", key="why_btn"):
-    with st.spinner("Analyzing delivery data…"):
-        msg = chatbot_message({
-            'distance_km': selected['distance_km'],
-            'Preparation_Time_min': selected['Preparation_Time_min'],
-            'Weather': weather,
-            'Traffic_Level': traffic,
-            'Time_of_Day': time,
-            'Vehicle_Type': vehicle,
-            'Courier_Experience_yrs': exp
-        })
-    st.session_state.chat_message = msg
-# Display chat message if available
-if 'chat_message' in st.session_state:
+
+# Use a form so the button stays active and we can show spinner cleanly
+with st.sidebar.form(key="my_form"):
+    ask = st.form_submit_button("Why is my order delayed?")
+    if ask:
+        # Clear any previous message
+        st.session_state.pop("chat_message", None)
+        # Show spinner while waiting
+        with st.spinner("Analyzing delivery data…"):
+            st.session_state.chat_message = chatbot_message({
+                'distance_km': selected['distance_km'],
+                'Preparation_Time_min': selected['Preparation_Time_min'],
+                'Weather': weather,
+                'Traffic_Level': traffic,
+                'Time_of_Day': time,
+                'Vehicle_Type': vehicle,
+                'Courier_Experience_yrs': exp
+            })
+
+# Once we have a response, display it
+if "chat_message" in st.session_state:
     st.sidebar.info(st.session_state.chat_message)
-
-# # Model retrain
-# if st.sidebar.button("Retrain Model"):
-#     train_model()
-#     st.sidebar.success("Model retrained")
-
-# # Main placeholder
-# st.header("📊 Delivery Analytics & Chatbot")
-
-# st.write("Use the sidebar to interact with predictions and ask for delay explanations.")
