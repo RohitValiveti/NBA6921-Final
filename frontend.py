@@ -63,6 +63,9 @@ if sel_id != st.session_state.selected_id:
 # Show selected
 selected = df[df['id']==st.session_state.selected_id].iloc[0]
 st.sidebar.markdown(f"**Selected:** {selected['name']}")
+st.sidebar.markdown(f"- Distance: **{selected['distance_km']} km**")
+st.sidebar.markdown(f"- Preparation time: **{selected['Preparation_Time_min']} min**")
+
 
 # ETA Prediction UI
 st.sidebar.header("ETA Prediction")
