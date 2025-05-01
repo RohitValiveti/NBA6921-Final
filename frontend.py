@@ -33,23 +33,28 @@ def render_map():
     ).add_to(m)
     for _, r in df.iterrows():
         icon_color = 'red' if r['id'] == st.session_state.selected_id else 'green'
+        popup = folium.Popup(
+            f"{r['id']}. <strong>{r['name']}</strong><br>Distance: {r['distance_km']} km<br>Preparation Time: {r['Preparation_Time_min']} min",
+            max_width=300,
+        )
         folium.Marker(
             location=[r['lat'], r['lon']],
             tooltip=r['name'],
-            popup=str(r['id']),
+            popup=popup,
             icon=folium.Icon(color=icon_color, icon='cutlery', prefix='fa')
         ).add_to(m)
     return m
 
 map_data = st_folium(render_map(), width=700, height=500)
 # Click detection
-if map_data and map_data.get('last_clicked'):
-    lat, lon = map_data['last_clicked']['lat'], map_data['last_clicked']['lng']
-    df['dist'] = ((df['lat']-lat)**2 + (df['lon']-lon)**2)
-    nearest = df.loc[df['dist'].idxmin()]
-    if nearest['dist'] < 0.005:
-        st.session_state.selected_id = nearest['id']
-        st.rerun()
+if map_data and map_data.get('last_object_clicked_popup'):
+    try:
+        clicked_id = int(map_data['last_object_clicked_popup'].split('.')[0])
+        if clicked_id in df['id'].values:
+            st.session_state.selected_id = clicked_id
+            st.rerun()
+    except ValueError:
+        pass
 
 # Sidebar selector
 names = df['name'].tolist()

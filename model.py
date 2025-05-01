@@ -100,3 +100,6 @@ def chatbot_message(feature_data):
     )
     message = response.choices[0].message.content
     return message
+
+if __name__ == "__main__":
+    train_model()
