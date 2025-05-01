@@ -4,6 +4,7 @@ import folium
 from streamlit_folium import st_folium
 from model import predict_delivery_time, train_model, chatbot_message
 
+
 # Load restaurant data
 df = pd.DataFrame([
     {"id": 1, "name": "Taste of Thai", "lat": 42.437810, "lon": -76.507968, "distance_km": 2.7, "Preparation_Time_min": 15},
@@ -19,6 +20,10 @@ df = pd.DataFrame([
 user_loc = {'lat': 42.441409, 'lon': -76.484592}
 
 st.title("Food Delivery Prediction 🍔")
+
+if 'model_trained' not in st.session_state:
+    train_model()
+    st.session_state.model_trained = True
 
 # Initialize session state
 if 'selected_id' not in st.session_state:
